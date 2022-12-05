@@ -2,8 +2,8 @@ use std::convert::TryFrom;
 // use std::str::Utf8Error;
 use std::str::{ self, Utf8Error };
 use super::methods::{ Method, MethodError };
-use std::error::Error;
 use std::fmt::{ Debug, Display, Result as FmtResult, Formatter };
+use std::error::Error;
 use super::QueryString;
 
 #[derive(Debug)]
@@ -11,6 +11,20 @@ pub struct Request<'foo> {
     path: &'foo str,
     query_string: Option<QueryString<'foo>>,
     method: Method,
+}
+
+impl<'buf> Request<'buf> {
+    pub fn path(&self) -> &str {
+        &self.path
+    }
+
+    pub fn query_string(&self) -> Option<&QueryString> {
+        self.query_string.as_ref()
+    }
+
+    pub fn method(&self) -> &Method {
+        &self.method
+    }
 }
 
 impl<'buff> TryFrom<&'buff [u8]> for Request<'buff> {
